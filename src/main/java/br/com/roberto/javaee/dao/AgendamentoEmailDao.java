@@ -32,5 +32,14 @@ public class AgendamentoEmailDao {
 		return query.getResultList();
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<AgendamentoEmail> listarAgendamentosNaoEnviados(){
+		Query query = manager.createQuery("select a from AgendamentoEmail a where a.enviado = false", 
+				AgendamentoEmail.class);
+		
+		return query.getResultList();
+		
+	}
 
 }

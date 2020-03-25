@@ -1,19 +1,27 @@
 package br.com.roberto.javaee.timer;
 
+import java.util.List;
+
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 
-import java.util.logging.Logger;
-import br.com.roberto.javaee.resource.AgendamentoEmailResource;
+import br.com.roberto.javaee.ejb.business.AgendamentoEmailBusiness;
+import br.com.roberto.javaee.entity.AgendamentoEmail;
 
 @Singleton
 public class AgendamentoEmailTimer {
-	
-	private static Logger logger = Logger.getLogger(AgendamentoEmailResource.class.getName());
+
+	@Inject
+	private AgendamentoEmailBusiness agendamentoEmailBusiness;
 	
 	@Schedule(hour = "*", minute = "*")
 	public void enviarEmailsAgendados() {
-		logger.info("Testando EJB Timer !");
+		
+		List<AgendamentoEmail> agendamentoEmails = agendamentoEmailBusiness.listarAgendamentosEmailNaoEnviados();
+		agendamentoEmails
+			.stream()
+			.forEach(agendamentoEmail -> agendamentoEmailBusiness.enviarEmail(agendamentoEmail));
 	}
 
 }
